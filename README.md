@@ -68,7 +68,7 @@
 
 ![](http://postfiles10.naver.net/20101009_169/force44_1286554648870_pLu2QR_png/100810_1617_56JVM2.png?type=w3)
 
-* `final static` v `static final`은 똑같은 기능을 하고, 이것은 바꿀 수 없는 것이다.
+* `final static` , `static final`은 똑같은 기능을 하고, 이것은 수정할 수 없는 것이다.
 * `static`이 없으면 인스턴스 메소드이기 때문에 반드시 `heap area`에 인스턴스가 있어야한다.
 * `Life cycle`이 짧은건 `stack`- `heap` - `static` 순으로 짧다. 
 
@@ -194,7 +194,7 @@ public class APIExample {
   }
   ```
 
-* 패키지 컴파일
+* 패키지 컴파일 명령어
 
   ```
   javac   [–d]   [패키지저장위치] SomeClass.java
@@ -251,23 +251,303 @@ public class Student{
 
 * 다른 패키지에 존재하는 클래스를 사용하기 위해 `import`문을 사용하여 사용하고자 하는 클래스의 경로를 지정해야한다.
 
+*`import`하는 방법 3가지*
+
 ```java
 package kr.co.kosta;
 
-import kr.or.kosta.school.Student; // 권장사항
+// 특정 클래스 경로 지정하기
+//import kr.or.kosta.school.Student; // 권장사항
+// 패키지 내의 모든 클래스 경로를 지정
 //import kr.or.kosta.school.*; -> 메모리를 많이 잡아먹기에 안쓰는게 낫다.
 
 public class Some {
 	public static void main(String[] args) {
 		
+         // inline import
+         kr.or.kosta.school.Student student;
+        
+        System.out.println();
+	}
+}
+```
+* 패키지로 만든 class파일 실행하는 명령어
+
+```
+C:\kosta187\workspace\oop>java kr.or.kosta.Some
+```
+
+* 자바 표준API는 여러 패키지로 구성되어 제공된다. 다음은 그 중 자주 쓰이는 패키지들이다.
+  * java.lang : 프로그래밍의 기본적인 클래스들을 제공
+  * java.util   : 프로그래밍의 유용한 유틸리티 클래스들을 제공
+  * java.io     : 프로그램 입출력과 관련된 클래스들을 제공
+  * java.net  : 네트워크 프로그램과 관련된 클래스들을 제공
+  * java.awt : GUI(Window) 프로그램 개발을 위한 클래스들을 제공
+
+## +역컴파일러
+
+```java
+C:\kosta187\workspace\oop>javap kr.co.kosta.Some // 역컴파일러 명령어
+Compiled from "Some.java"
+public class kr.co.kosta.Some {
+  public kr.co.kosta.Some();
+  public static void main(java.lang.String[]);
+}
+```
+
+---
+
+## Eclipse
+
+* IDE(통합개발환경)
+* workspace
+  * project Group를 말합니다.
+  * src - source code
+* Intellij 써보고싶지만 어렵더라..
+* Perspective - 개발자 모드
+* Java EE Perspective는 서버개발자용
+* Java SE Perspective가 그냥
+* Window - Preferences - General - Workspace - Text file Encoding에서 UTF-8로!
+* 알아보기 힘든 문자가 나오면 당황하지않고 Editor 프로그램으로 복붙해주자.
+* 보통 ctr + space로 완성할 수 있는 단축키들은 템플릿이라고 한다.
+* Copy Lines = ctr + alt + 방향키 아래(`그러나 제조사에 따라 해당 키가 다른 단축키일 수 있으니 조심하자.`)
+
+---
+
+## 메소드 [반복]
+
+* 객체와 관련된 기능(행위)을 정의한다.
+
+* 인스턴스 메소드 - 특정 객체의 속성 관련된 기능 정의
+
+  ```java
+  public void instanceMethod(){
+      // 속성과 관련된 기능 구현
+  }
+  ```
+
+* 클래스(static) 메소드 - 모든 객체가 공통적으로 사용할 기능 정의
+
+  ```java
+  public static void staticMethod{
+      // 공통 기능 구현
+  }
+  ```
+
+* 메소드 형식
+
+  * 메소드의 이름은 소문자로 시작하는 것이 관례(Camel 표기법)
+
+  ```java
+  [접근 제한자] [기타 제한자] 반환형 methodName(매개변수리스트){
+            //  기능 구현
+   }
+  ```
+
+* 메소드 반환형
+
+  * 반환값이 없는 경우 void
+  * 기본 자료형 뿐만 아니라 참조자료형의 데이터도 반환.
+
+  ```java
+  public int sum(int x, int y){
+      return x + y;
+  }
+  ```
+
+  ```java
+  public Student getStudent(int ssn){
+      ...
+          return student;
+  }
+  ```
+
+* 메소드 오버로딩
+
+  * 한 클래스 내에 같은 이름을 가진 메서드를 여러 개 중복정의 하는 것
+
+  * 규칙 
+
+    * 메서드 이름은 같으나 매개변수의 개수나 데이터 유형이 서로 달라야한다.
+    * 메서드의 반환형 만으로는 메서드 오버로딩 불가
+
+    ```java
+    // 매개변수가 없는 메소드 정의
+    public static void speedUp() {
+         currentSpeed++;
+    }
+    
+    // 정수형 매개변수 하나인 메소드 정의
+    public static void speedUp(int speed) {
+         currentSpeed += speed;
+    }
+    ```
+
+* Ctr + F11 = 맨 마지막 명령문 실행
+
+* Run java는 다른키. 편한걸로 바꿔줘도 무방.
+
+---
+
+## Array
+
+* 대량의 데이터를 저장하고, 관리하기 위한 가장 기본이 되는 데이터 구조
+  * 이름 없는 변수들의 순차적 나열
+* 자바는 배열을 하나의 클래스로 취급한다.
+* 생성된 배열 객체(인스턴스)는 직접 접근할 수 없고 반드시 참조변수를 통해 접근해야 한다.
+* 배열은 동일한 데이터 유형만 저장할 수 있으며, 한번 생성된 후에는 배열의 크기를 변경할 수 없다.
+* 배열은 각각의 원소에 할당하는 데이터 유형에 따라 기본 데이터 타입(8개) 배열과 참조(`reference`) 타입 배열로 구분된다.
+* 배열 사용법
+
+```java
+package day4_180821_OopStudy;
+
+/**
+ * 
+ * 1차원 배열 선언, 생성, 초기화
+ *
+ */
+
+public class ArrayExample {
+	public static void main(String[] args) {
+		// 아래 형태 모두 배열 선언가능하다.
+		int [] x; // 타입 [] 변수명으로 선언
+		int xy []; // 타입 변수명 [] 으로 선언
+		// 배열 생성
+		int[] p = new int[6]; // 이렇게 생성하면 int형이니까 자동으로 초기화되어서, 값들이 모두 0으로 초기화 된다.
+		// 초기화
+		p[0] = 5;
+		p[1] = 4;
+		//...
+		p[5] = 0;
+		// 특정값을 대입하며 배열 선언 - 초기화와 동시에 배열을 선언하여 생성.
+		int [] intArray = {1, 2, 3};
+		int [] intArray2 = new int[] {5, 4, 3, 2, 1};
 	}
 }
 ```
 
+*ArrayExample.java*
 
+```java
+package day4_180821_OopStudy;
 
+/**
+ * 
+ * 1차원 배열 선언, 생성, 초기화
+ *
+ */
 
+public class ArrayExample {
+	public static void main(String[] args) {
+		int[] array;
+		array = new int[10];
+		array[0] = 0;
+		array[1] = 1;
+		array[2] = 2;
+		array[5] = 5;
+		array[9] = 10;
 
+		// 하나씩 출력해보자
+		for (int i = 0; i < array.length; i++) {
+			System.out.print(array[i] + " ");
+		}
+		System.out.println();
+//		int[] array2 = new int[] {1, 2, 3, 4, 5};
+		int[] array2 = { 1, 2, 3, 4, 5 };
 
+		for (int i = 0; i < array2.length; i++) {
+			System.out.print(array2[i]);
+		}
+		System.out.println();
+		// 확장된 for문
+		// for(데이터형 접근변수명:반복하고자 하는 배열){}
+		// index 접근은 안됩니다.
+		for (int a : array2) {
+			System.out.print(a);
+		} // 위의 for문과 같다.
+		
+	}
+}
 
+```
+
+* 확장된 for문
+  *  for(데이터형 접근변수명:반복하고자 하는 배열){}
+  * index로의 접근은 안됩니다.
+
+*ArrayExample.java 미션추가ver*
+
+```java
+package day4_180821_OopStudy;
+
+import java.util.Arrays;
+
+/**
+ * 
+ * 1차원 배열 선언, 생성, 초기화
+ *
+ */
+
+public class ArrayExample {
+	public static void main(String[] args) {
+		int[] array;
+		array = new int[10];
+		array[0] = 0;
+		array[1] = 1;
+		array[2] = 2;
+		array[5] = 5;
+		array[9] = 10;
+
+		// 하나씩 출력해보자
+		for (int i = 0; i < array.length; i++) {
+			System.out.print(array[i] + " ");
+		}
+		System.out.println();
+//		int[] array2 = new int[] {1, 2, 3, 4, 5};
+		int[] array2 = { 1, 2, 3, 4, 5 };
+
+		for (int i = 0; i < array2.length; i++) {
+			System.out.print(array2[i]);
+		}
+		System.out.println();
+		// 확장된 for문
+		// for(데이터형 접근변수명:반복하고자 하는 배열){}
+		// index 접근은 안됩니다.
+		for (int a : array2) {
+			System.out.print(a);
+		} // 위의 for문과 같다.
+		System.out.println();
+
+		// 미션 1 (배열 복사)
+		int[] array3 = { 3, 1, 9, 2, 5 };
+		int[] array4 = new int[7];
+		for (int i = 0; i < array3.length; i++) {
+			array4[i] = array3[i];
+		}
+		for (int b : array4) {
+			System.out.print(b + " ");
+		}
+		System.out.println();
+
+		// 미션 2 (sort)
+		int[] lottos = { 34, 12, 3, 9, 25, 2 };
+//		Arrays.sort(lottos);
+		int tmp;
+		for (int i = 0; i < lottos.length; i++) {
+			for (int j = i + 1; j < lottos.length; j++) {
+				if (lottos[i] > lottos[j]) {
+					tmp = lottos[i];
+					lottos[i] = lottos[j];
+					lottos[j] = tmp;
+				}
+			}
+		}
+
+		for (int a : lottos) {
+			System.out.print(a + " ");
+		}
+	}
+}
+```
 
